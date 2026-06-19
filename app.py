@@ -463,30 +463,95 @@
 
 
 
+# import streamlit as st
+# import numpy as np
+# from PIL import Image
+# from tensorflow.keras.models import load_model
+# from tensorflow.keras.preprocessing.image import img_to_array
+
+# st.set_page_config(
+#     page_title="Brain Tumor MRI Classifier",
+#     page_icon="🧠",
+#     layout="centered"
+# )
+
+# @st.cache_resource
+# def load_my_model():
+#     return load_model("brain_tumor_model.keras")
+
+# with st.spinner("Loading AI Model..."):
+#     model = load_my_model()
+
+# st.title("🧠 Brain Tumor MRI Classification")
+
+# st.write(
+#     "Upload an MRI scan image and test the pipeline."
+# )
+
+# uploaded_file = st.file_uploader(
+#     "Upload MRI Image",
+#     type=["jpg", "jpeg", "png"],
+#     key="mri_upload"
+# )
+
+# if uploaded_file is not None:
+
+#     st.write("✅ File uploaded")
+
+#     image = Image.open(uploaded_file).convert("RGB")
+
+#     st.write("✅ Image opened")
+
+#     st.image(
+#         image,
+#         caption="Uploaded MRI Scan",
+#         use_container_width=True
+#     )
+
+#     image = image.resize((224, 224))
+
+#     st.write("✅ Image resized")
+
+#     img_array = img_to_array(image)
+
+#     st.write("✅ Numpy array created")
+
+#     img_array = np.expand_dims(img_array, axis=0)
+
+#     st.write("✅ Batch dimension added")
+
+#     st.write("Shape:", img_array.shape)
+
+#     st.success("🎉 Everything before prediction works correctly.")
+
+#     st.write("Model loaded successfully:")
+#     st.write(type(model))
+
+
+
 import streamlit as st
 import numpy as np
+import time
 from PIL import Image
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 
-st.set_page_config(
-    page_title="Brain Tumor MRI Classifier",
-    page_icon="🧠",
-    layout="centered"
-)
+st.set_page_config(page_title="Brain Tumor MRI")
 
 @st.cache_resource
 def load_my_model():
     return load_model("brain_tumor_model.keras")
 
-with st.spinner("Loading AI Model..."):
-    model = load_my_model()
+model = load_my_model()
+
+class_names = [
+    "glioma",
+    "meningioma",
+    "notumor",
+    "pituitary"
+]
 
 st.title("🧠 Brain Tumor MRI Classification")
-
-st.write(
-    "Upload an MRI scan image and test the pipeline."
-)
 
 uploaded_file = st.file_uploader(
     "Upload MRI Image",
@@ -496,38 +561,41 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
 
-    st.write("✅ File uploaded")
-
     image = Image.open(uploaded_file).convert("RGB")
-
-    st.write("✅ Image opened")
-
-    st.image(
-        image,
-        caption="Uploaded MRI Scan",
-        use_container_width=True
-    )
 
     image = image.resize((224, 224))
 
-    st.write("✅ Image resized")
-
     img_array = img_to_array(image)
-
-    st.write("✅ Numpy array created")
 
     img_array = np.expand_dims(img_array, axis=0)
 
-    st.write("✅ Batch dimension added")
+    st.write("Starting prediction...")
 
-    st.write("Shape:", img_array.shape)
+    start = time.time()
 
-    st.success("🎉 Everything before prediction works correctly.")
+    try:
 
-    st.write("Model loaded successfully:")
-    st.write(type(model))
+        prediction = model(img_array, training=False)
 
+        end = time.time()
 
+        prediction = prediction.numpy()
 
+        st.success("Prediction Complete")
 
+        st.write(
+            f"Time Taken: {round(end-start,2)} seconds"
+        )
+
+        st.write(prediction)
+
+        predicted_index = np.argmax(prediction)
+
+        st.write(
+            f"Class: {class_names[predicted_index]}"
+        )
+
+    except Exception as e:
+
+        st.error(str(e))
 
