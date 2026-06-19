@@ -187,11 +187,27 @@ if uploaded_file is not None:
 
     with st.spinner("🧠 Analysing MRI Image..."):
 
-        prediction = model.predict(img_array)
+        # prediction = model.predict(img_array)
 
-        predicted_index = np.argmax(prediction)
-        confidence = np.max(prediction) * 100
-        predicted_class = class_names[predicted_index]
+        # predicted_index = np.argmax(prediction)
+        # confidence = np.max(prediction) * 100
+        # predicted_class = class_names[predicted_index]
+
+        st.write("Before prediction")
+
+        prediction = model.predict(img_array, verbose=0)
+
+        st.write("After prediction")
+
+
+
+
+
+
+
+
+
+        
 
     st.success(f"Prediction: {predicted_class}")
     st.info(f"Confidence: {confidence:.2f}%")
