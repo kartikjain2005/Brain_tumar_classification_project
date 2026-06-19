@@ -69,7 +69,32 @@
 
 
 
-import streamlit as st
+# import streamlit as st
 
-st.title("Brain Tumor MRI Classification")
-st.success("App Running Successfully")
+# st.title("Brain Tumor MRI Classification")
+# st.success("App Running Successfully")
+
+
+
+
+
+
+
+
+
+import streamlit as st
+from tensorflow.keras.models import load_model
+
+st.set_page_config(page_title="Brain Tumor MRI Classification")
+
+st.title("🧠 Brain Tumor MRI Classification")
+
+st.write("Trying to load model...")
+
+try:
+    model = load_model("brain_tumor_model.keras")
+    st.success("✅ Model Loaded Successfully")
+
+except Exception as e:
+    st.error("❌ Model Loading Failed")
+    st.code(str(e))
