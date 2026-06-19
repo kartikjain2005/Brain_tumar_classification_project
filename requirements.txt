@@ -2,3 +2,4 @@ streamlit
 tensorflow
 numpy
 pillow
+python = 3.11
