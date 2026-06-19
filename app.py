@@ -82,19 +82,46 @@
 
 
 
+# import streamlit as st
+# from tensorflow.keras.models import load_model
+
+# st.set_page_config(page_title="Brain Tumor MRI Classification")
+
+# st.title("🧠 Brain Tumor MRI Classification")
+
+# st.write("Trying to load model...")
+
+# try:
+#     model = load_model("brain_tumor_model.keras")
+#     st.success("✅ Model Loaded Successfully")
+
+# except Exception as e:
+#     st.error("❌ Model Loading Failed")
+#     st.code(str(e))
+
+
+
+
+
+
+
+
+
+
+
 import streamlit as st
 from tensorflow.keras.models import load_model
 
-st.set_page_config(page_title="Brain Tumor MRI Classification")
+st.title("Brain Tumor MRI Classification")
 
-st.title("🧠 Brain Tumor MRI Classification")
+st.write("Step 1")
 
-st.write("Trying to load model...")
+@st.cache_resource
+def load_my_model():
+    return load_model("brain_tumor_model.keras")
 
-try:
-    model = load_model("brain_tumor_model.keras")
-    st.success("✅ Model Loaded Successfully")
+st.write("Step 2")
 
-except Exception as e:
-    st.error("❌ Model Loading Failed")
-    st.code(str(e))
+model = load_my_model()
+
+st.write("Step 3 - Model Loaded Successfully")
